@@ -1,0 +1,6 @@
+customer_id,first_name,last_name,email,phone,signup_date
+1,John,Doe,john.doe@example.com,123-456-7890,2023-01-15
+2,Jane,Smith,jane.smith@example.com,,2023-02-01
+3,John,Doe,john.doe@example.com,1234567890,2023-01-15
+4,Bob,,bob@example.com,987-654-3210,2023-03-01
+5,alice,jones,ALICE.JONES@example.com,555-555-5555,2023-02-20

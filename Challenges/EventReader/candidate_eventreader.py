@@ -1,21 +1,15 @@
-from __future__ import annotations
-
+from dataclasses import dataclass
+from datetime import datetime
 import json
 import logging
-from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, Optional, Tuple
 
-# -----------------
-# Logging configuratie
-# -----------------
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.INFO, 
     format="%(asctime)s %(levelname)s %(message)s"
 )
 logger = logging.getLogger(__name__)
-
 
 # -----------------
 # Datamodel
@@ -28,19 +22,20 @@ class Event:
     amount: Optional[float] = None
 
 
-# -----------------
-# Validatie & parsing
-# -----------------
-def parse_iso_timestamp(value: str) -> datetime:
-    """
-    Parse ISO-8601 UTC timestamp.
-    Verwacht format: 2024-01-01T10:00:00Z
-    """
-    try:
-        dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
-        return dt.astimezone(timezone.utc)
-    except Exception as exc:
-        raise ValueError(f"Ongeldige timestamp: {value}") from exc
+def read_events(file_path: Path) -> Iterable[Event]:
+    logger.info("Lezen van events uit %s", file_path)
+    events = []
+    with file_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            try:
+                raw_event = json.loads(line)
+                yield parse_event(raw_event)
+            except json.JSONDecodeError as exc:
+                logger.warning("Ongeldige JSON regel: %s", line.strip())
+            except Exception as exc:
+                logger.warning("Ongeldig event: %s", exc)
+
+    return events
 
 
 def parse_event(raw: dict) -> Event:
@@ -55,12 +50,15 @@ def parse_event(raw: dict) -> Event:
     if not isinstance(timestamp_raw, str):
         raise ValueError("timestamp ontbreekt of is geen string")
 
-    timestamp = parse_iso_timestamp(timestamp_raw)
+    try:
+        timestamp = datetime.fromisoformat(timestamp_raw.replace("Z", "+00:00"))
+    except Exception as exc:
+        raise ValueError(f"Ongeldige timestamp: {timestamp_raw}") from exc
 
     amount = raw.get("amount")
     if event_type == "purchase":
-        if not isinstance(amount, (int, float)) or amount <= 0:
-            raise ValueError("purchase event moet een positief amount hebben")
+        if not isinstance(amount, (int, float)):
+            raise ValueError("amount moet een getal zijn voor purchase events")
         amount = float(amount)
     else:
         amount = None
@@ -69,25 +67,9 @@ def parse_event(raw: dict) -> Event:
         user_id=raw["user_id"],
         event_type=event_type,
         timestamp=timestamp,
-        amount=amount,
+        amount=amount
     )
 
-
-# -----------------
-# Input reader (streaming)
-# -----------------
-def read_events(path: Path) -> Iterable[Event]:
-    with path.open("r", encoding="utf-8") as f:
-        for line_number, line in enumerate(f, start=1):
-            try:
-                raw = json.loads(line)
-                yield parse_event(raw)
-            except Exception as exc:
-                logger.warning(
-                    "Ongeldig event overgeslagen (regel %s): %s",
-                    line_number,
-                    exc,
-                )
 
 
 # -----------------
@@ -140,15 +122,20 @@ def write_csv(
             )
 
 
-# -----------------
+
 # Main
 # -----------------
 def main() -> None:
-    input_path = Path("events.jsonl")
-    output_path = Path("daily_user_stats.csv")
+    input_path = Path("Challenges/Eventreader/events.jsonl")
+    output_path = Path("Challenges/Eventreader/daily_user_stats.csv")
 
     logger.info("Start verwerken van events")
-    events = read_events(input_path)
+    try:
+        events = read_events(input_path)
+    except Exception as exc:
+        logger.error("Fout bij het lezen van events: %s", exc)
+        return
+    
     stats = aggregate_events(events)
     write_csv(stats, output_path)
     logger.info("Klaar. Output geschreven naar %s", output_path)
