@@ -1,0 +1,4 @@
+{"user_id": 123, "event_type": "click", "timestamp": "2024-01-01T10:00:00Z"}
+{"user_id": 123, "event_type": "purchase", "timestamp": "2024-01-01T10:05:00Z", "amount": 19.99}
+{"user_id": 456, "event_type": "click", "timestamp": "2024-01-01T11:00:00Z"}
+{"user_id": 123, "event_type": "click", "timestamp": "INVALID_TIMESTAMP"}
