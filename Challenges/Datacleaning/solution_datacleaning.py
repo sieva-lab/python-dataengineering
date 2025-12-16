@@ -8,7 +8,7 @@ import re
 from typing import Optional, Iterable, Dict, Set
 
 # -----------------
-# Logging configuratie
+# Logging configuration
 # -----------------
 logging.basicConfig(
     level=logging.INFO,
@@ -17,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # -----------------
-# Dataclass voor klantrecord
+# Dataclass customer
 # -----------------
 @dataclass
 class Customer:
@@ -80,7 +80,7 @@ def read_customers(path: Path) -> Iterable[Customer]:
                 logger.warning("Ongeldige regel %s: %s", line_number, exc)
 
 # -----------------
-# Deduplicatie en merge
+# Deduplication and merge
 # -----------------
 def deduplicate_customers(customers: Iterable[Customer]) -> Dict[str, Customer]:
     """
@@ -99,7 +99,7 @@ def deduplicate_customers(customers: Iterable[Customer]) -> Dict[str, Customer]:
 
         if primary_key in unique_customers:
             master = unique_customers[primary_key]
-            # Merge ontbrekende velden
+            # Merge missing fields
             if not master.phone and cust.phone:
                 master.phone = cust.phone
             if not master.last_name and cust.last_name:

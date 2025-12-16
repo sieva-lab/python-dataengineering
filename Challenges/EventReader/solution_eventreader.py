@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, Iterable, Optional, Tuple
 
 # -----------------
-# Logging configuratie
+# Logging configuration
 # -----------------
 logging.basicConfig(
     level=logging.INFO,
@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 
 
 # -----------------
-# Datamodel
+# Dataclass event
 # -----------------
-@dataclass(frozen=True)
+@dataclass(frozen=True) 
 class Event:
     user_id: int
     event_type: str
@@ -29,7 +29,7 @@ class Event:
 
 
 # -----------------
-# Validatie & parsing
+# Validation & parsing
 # -----------------
 def parse_iso_timestamp(value: str) -> datetime:
     """
@@ -91,7 +91,7 @@ def read_events(path: Path) -> Iterable[Event]:
 
 
 # -----------------
-# Aggregatie
+# Aggregation
 # -----------------
 AggregationKey = Tuple[str, int]  # (date, user_id)
 

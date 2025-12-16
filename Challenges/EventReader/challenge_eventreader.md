@@ -1,14 +1,18 @@
-# 🧠 Programmeeruitdaging: Event Processing Pipeline
+Absoluut\! Hier is de volledige programmeeruitdaging, vertaald naar het Engels en samengevoegd in één Markdown-document.
+
+-----
+
+# 🧠 Programming Challenge: Event Processing Pipeline
 
 ## 🌟 Context
 
-U werkt als Data Engineer bij een bedrijf dat gebruikersgedrag volgt via streams van events. Deze events komen binnen als **JSON Lines** (bijv. afkomstig uit Kafka of een logbestand). Uw taak is het bouwen van een **betrouwbare en schaalbare pipeline** die deze events verwerkt, valideert en aggregeert.
+You are working as a Data Engineer at a company that tracks user behavior through streams of events. These events arrive as **JSON Lines** (e.g., originating from Kafka or a log file). Your task is to build a **reliable and scalable pipeline** that processes, validates, and aggregates these events.
 
 ## 📥 Input Dataset
 
-Het invoerbestand is `events.jsonl` (JSON Lines-formaat), waarbij elke regel één onafhankelijk JSON-object is.
+The input file is `events.jsonl` (JSON Lines format), where each line is one independent JSON object.
 
-**Voorbeeld data:**
+**Example Data:**
 
 ```jsonl
 {"user_id": 123, "event_type": "click", "timestamp": "2024-01-01T10:00:00Z"}
@@ -18,64 +22,64 @@ Het invoerbestand is `events.jsonl` (JSON Lines-formaat), waarbij elke regel é�
 {"user_id": 789, "event_type": "purchase", "timestamp": "2024-01-02T12:00:00Z", "amount": -5.00}
 ```
 
-## 🎯 Doelstellingen
+## 🎯 Objectives
 
-### 1\. Events Validatie & Foutafhandeling
+### 1\. Event Validation & Error Handling
 
-Het programma moet elk event valideren volgens de volgende regels:
+The program must validate each event according to the following rules:
 
-  * **`user_id`**: Moet een **integer** zijn.
-  * **`event_type`**: Moet een **niet-lege string** zijn.
-  * **`timestamp`**: Moet een **geldige ISO-8601 UTC timestamp** zijn.
-  * **Aanvullende regel voor `purchase` events:**
-      * Het veld `amount` moet aanwezig zijn en een **positieve numerieke waarde** hebben.
+  * **`user_id`**: Must be an **integer**.
+  * **`event_type`**: Must be a **non-empty string**.
+  * **`timestamp`**: Must be a **valid ISO-8601 UTC timestamp**.
+  * **Additional rule for `purchase` events:**
+      * The `amount` field must be present and have a **positive numeric value**.
 
-**Afhandeling van Ongeldige Events:**
+**Handling Invalid Events:**
 
-  * Ongeldige events moeten **overgeslagen** worden voor aggregatie.
-  * **Log** elk ongeldig event met een duidelijke foutmelding (gebruik de standaard Python `logging` module).
+  * Invalid events must be **skipped** for aggregation.
+  * **Log** each invalid event with a clear error message (use the standard Python `logging` module).
 
-### 2\. Events Aggregatie
+### 2\. Event Aggregation
 
-Valide events moeten geaggregeerd worden **per unieke gebruiker (`user_id`) en per dag**.
+Valid events must be aggregated **per unique user (`user_id`) and per day**.
 
-De volgende statistieken moeten verzameld worden:
+The following statistics must be collected:
 
-  * Totaal **aantal events** (`event_count`)
-  * Totaal **aantal purchases** (`purchase_count`)
-  * Totale **omzet** (`total_revenue`)
+  * Total **number of events** (`event_count`)
+  * Total **number of purchases** (`purchase_count`)
+  * Total **revenue** (`total_revenue`)
 
 ### 3\. Output
 
-De geaggregeerde resultaten moeten worden weggeschreven naar een CSV-bestand: `daily_user_stats.csv`.
+The aggregated results must be written to a CSV file: `daily_user_stats.csv`.
 
-**Output Kolommen:**
+**Output Columns:**
 
 | date | user\_id | event\_count | purchase\_count | total\_revenue |
 | :--- | :--- | :--- | :--- | :--- |
 
-## ⚙️ Technische Vereisten
+## ⚙️ Technical Requirements
 
-  * **Taal/Versie:** Python 3.10+
-  * **Datamodellering:** Gebruik **dataclasses** (of Pydantic voor geavanceerde validatie) en **type hints**.
-  * **Schaalbaarheid:** Het bestand is te groot om volledig in het geheugen te laden. De oplossing moet gebruik maken van een **streaming-achtige aanpak** (bijv. generatoren).
-  * **Codekwaliteit:** Code moet leesbaar, modulair en testbaar zijn.
-  * **Foutafhandeling:** Robuust gebruik van de `logging` module.
+  * **Language/Version:** Python 3.10+
+  * **Data Modeling:** Use **dataclasses** (or Pydantic for advanced validation) and **type hints**.
+  * **Scalability:** The file may be too large to load entirely into memory. The solution must use a **streaming-like approach** (e.g., generators).
+  * **Code Quality:** Code must be readable, modular, and testable.
+  * **Error Handling:** Robust use of the `logging` module.
 
-## ⭐ Bonuspunten (Optioneel)
+## ⭐ Bonus Points (Optional)
 
-Kies één of meer van de volgende punten om de oplossing te verbeteren:
+Choose one or more of the following points to enhance the solution:
 
-1.  **Unit Tests:** Lever een setje **Pytest** unit tests aan voor de validatie- en aggregatielogica.
-2.  **Modulaire Architectuur:** Scheiding tussen I/O (lezen/schrijven), event validatie en de business logic (aggregatie).
-3.  **Operationele Context:** Voeg een korte uitleg toe over hoe deze pipeline operationeel zou draaien (bijv. binnen **Airflow** of door integratie met **Kafka**).
+1.  **Unit Tests:** Provide a set of **Pytest** unit tests for the validation and aggregation logic.
+2.  **Modular Architecture:** Separation between I/O (reading/writing), event validation, and the business logic (aggregation).
+3.  **Operational Context:** Add a brief explanation of how this pipeline would run operationally (e.g., within **Airflow** or by integrating with **Kafka**).
 
-## 🧪 Geteste Vaardigheden
+## 🧪 Skills Tested
 
-Deze uitdaging test uw vaardigheden in:
+This challenge tests your skills in:
 
-  * Data validatie & error handling (kritiek voor productiecode)
-  * Efficiënt verwerken van grote datasets (streaming/generatoren)
+  * Data validation & error handling (critical for production code)
+  * Efficient processing of large datasets (streaming/generators)
   * Python best practices (type hints, dataclasses/Pydantic)
-  * Data modeling (hoe aggregatiestructuren te ontwerpen)
-  * Productie-denkwerk (logging, schaalbaarheid, operationele context)
+  * Data modeling (how to design aggregation structures)
+  * Production-mindedness (logging, scalability, operational context)
