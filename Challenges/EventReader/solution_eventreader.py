@@ -153,6 +153,5 @@ def main() -> None:
     write_csv(stats, output_path)
     logger.info("Klaar. Output geschreven naar %s", output_path)
 
-
 if __name__ == "__main__":
     main()
