@@ -144,8 +144,9 @@ def write_csv(
 # Main
 # -----------------
 def main() -> None:
-    input_path = Path("Challenges/Eventreader/events.jsonl")
-    output_path = Path("Challenges/Eventreader/daily_user_stats.csv")
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent  # root = python/ 
+    input_path = BASE_DIR / "challenges" / "eventreader" / "events.jsonl"
+    output_path = BASE_DIR / "challenges" / "eventreader" / "daily_user_stats.csv"
 
     logger.info("Start verwerken van events")
     events = read_events(input_path)

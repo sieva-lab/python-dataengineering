@@ -10,13 +10,13 @@ The project is structured to work seamlessly in VS Code.
 📁 Project Structure
 python/
 └── challenges/
-    ├── data_cleaning/
+    ├── datacleaning/
     │   ├── customers_raw.csv
     │   ├── customers_clean.csv
     │   ├── challenge_datacleaning.py
     │   └── challenge_datacleaning.md
     │
-    ├── event_processing/
+    ├── eventreader/
     │   ├── events.jsonl
     │   ├── daily_user_stats.csv
     │   ├── challenge_eventreader.py
@@ -34,7 +34,7 @@ Expected output files
 Logging for data quality and error handling
 
 🧩 Available Challenges
-1️⃣ Data Cleaning & Deduplication
+1️⃣ Datacleaning: data cleaning & deduplication
 Focus areas:
 
 Data standardization (emails, phone numbers, dates)
@@ -53,7 +53,7 @@ Hash-based deduplication
 
 ETL-style data pipelines
 
-2️⃣ Event Processing Pipeline
+2️⃣ Eventreader: event processing pipeline
 Focus areas:
 
 Streaming JSON Lines processing
@@ -106,4 +106,4 @@ To run tests (if provided):
 
 Bash
 
-pytest
+python -m pytest

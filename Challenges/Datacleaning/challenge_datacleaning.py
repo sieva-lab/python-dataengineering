@@ -47,7 +47,7 @@ class Customer:
                     self.signup_date = datetime.fromisoformat(self.signup_date)
             except Exception:
                 logger.warning(
-                    "Ongeldige signup_date op regel %s: %s",
+                    "Invalid signup_date line %s: %s",
                     self.raw_line_number,
                     self.signup_date,
                 )
@@ -57,7 +57,7 @@ class Customer:
 # Input reader (streaming CSV)
 # -----------------
 def read_customers(path: Path) -> Iterable[Customer]:
-    logger.info("Lezen van klantenbestand uit %s", path)
+    logger.info("Reading customer file %s", path)
     with path.open("r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for line_number, row in enumerate(reader, start=2):  # start=2 voor header
@@ -77,15 +77,15 @@ def read_customers(path: Path) -> Iterable[Customer]:
                 customer.parse_signup_date()
                 yield customer
             except Exception as exc:
-                logger.warning("Ongeldige regel %s: %s", line_number, exc)
+                logger.warning("Invalid line %s: %s", line_number, exc)
 
 # -----------------
 # Deduplication and merge
 # -----------------
 def deduplicate_customers(customers: Iterable[Customer]) -> Dict[str, Customer]:
     """
-    Dedupliceer klanten op basis van email (primary) of first+last+phone.
-    Houd het eerste record als “master” en vul ontbrekende velden aan.
+    Deduplicate customers based on email (primary) or first+last+phone.
+    Keep the first record as "master" and fill in missing fields.
     """
     unique_customers: Dict[str, Customer] = {}
     seen_composite_keys: Set[str] = set()
@@ -106,10 +106,10 @@ def deduplicate_customers(customers: Iterable[Customer]) -> Dict[str, Customer]:
                 master.last_name = cust.last_name
             if not master.signup_date and cust.signup_date:
                 master.signup_date = cust.signup_date
-            logger.info("Duplicate email gevonden: %s (regel %s)", cust.email, cust.raw_line_number)
+            logger.info("Duplicate email found: %s (line %s)", cust.email, cust.raw_line_number)
         elif composite_key in seen_composite_keys:
             logger.info(
-                "Duplicate via composite key gevonden: %s %s %s (regel %s)",
+                "Duplicate via composite key found: %s %s %s (line %s)",
                 cust.first_name,
                 cust.last_name,
                 cust.phone,
@@ -125,7 +125,7 @@ def deduplicate_customers(customers: Iterable[Customer]) -> Dict[str, Customer]:
 # CSV Writer
 # -----------------
 def write_clean_customers(customers: Dict[str, Customer], output_path: Path) -> None:
-    logger.info("Schrijven van %s unieke klanten naar %s", len(customers), output_path)
+    logger.info("Writing %s unique customers to %s", len(customers), output_path)
     fieldnames = ["customer_id", "first_name", "last_name", "email", "phone", "signup_date"]
     with output_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -144,13 +144,14 @@ def write_clean_customers(customers: Dict[str, Customer], output_path: Path) -> 
 # Main
 # -----------------
 def main() -> None:
-    input_path = Path("Challenges/Datacleaning/customers_raw.csv")
-    output_path = Path("Challenges/Datacleaning/customers_clean.csv")
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent  # root = python/ 
+    input_path = BASE_DIR / "challenges" / "datacleaning" / "customers_raw.csv"
+    output_path = BASE_DIR / "challenges" / "datacleaning" / "customers_clean.csv"
 
     customers_gen = read_customers(input_path)
     clean_customers = deduplicate_customers(customers_gen)
     write_clean_customers(clean_customers, output_path)
-    logger.info("Klaar!")
+    logger.info("Finished!")
 
 if __name__ == "__main__":
     main()
