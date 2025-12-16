@@ -1,6 +1,6 @@
 # 🐍 Python Data Engineering Challenges
 
-This repository contains a set of **Data Engineering programming challenges** implemented in Python.
+This project contains a set of **Data Engineering programming challenges** implemented in Python.
 
 The challenges are designed to assess practical skills in **data cleaning**, **event processing**, and **ETL-style pipeline design**, with an emphasis on **scalability**, **data quality**, and **production-ready thinking**.
 
@@ -12,20 +12,26 @@ The project is structured to work seamlessly in **VS Code**.
 
 ```
 
-python/
+python-dataengineering/
 └── challenges/
-├── datacleaning/
-│   ├── customers\_raw.csv
-│   ├── customers\_clean.csv
-│   ├── challenge\_datacleaning.py
-│   └── challenge\_datacleaning.md
-│
-├── eventreader/
-│   ├── events.jsonl
-│   ├── daily\_user\_stats.csv
-│   ├── challenge\_eventreader.py
-│   └── challenge\_eventreader.md
-│
+│    ├── datacleaning/
+│    │   ├── customers_raw.csv
+│    │   ├── customers_clean.csv
+│    │   ├── challenge_datacleaning.py
+│    │   └── challenge_datacleaning.md
+│    │
+│    ├── eventreader/
+│    │   ├── challenge_eventreader.md
+│    │   └── ...
+│    │
+│    ├── tests/ 
+│    │   ├── eventreader/
+│    │   │      ├── test_parsing.py
+│    │   │      └── ...
+│    │   └── ...
+│    │
+|    └── README.md
+| 
 └── README.md
 
 ````
@@ -100,8 +106,13 @@ Output files and logs will be generated in the same challenge folder.
 
 Some challenges include optional unit testing tasks.
 
-To run tests (if provided):
+To run all tests (if provided):
 
 ```bash
 python -m pytest
+```
+
+To run one testfile:
+```bash
+python -m pytest tests/eventreader/test_parsing.py
 ```
