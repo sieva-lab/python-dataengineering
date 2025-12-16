@@ -1,5 +1,3 @@
-Certainly! Here is the content translated to English and formatted into a single, structured Markdown document.
-
 🐍 Python Data Engineering Challenges
 This repository contains a set of Data Engineering programming challenges implemented in Python.
 
