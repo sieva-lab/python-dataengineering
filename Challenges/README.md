@@ -13,13 +13,13 @@ python/
     ├── data_cleaning/
     │   ├── customers_raw.csv
     │   ├── customers_clean.csv
-    │   ├── solution_datacleaning.py
+    │   ├── challenge_datacleaning.py
     │   └── challenge_datacleaning.md
     │
     ├── event_processing/
     │   ├── events.jsonl
     │   ├── daily_user_stats.csv
-    │   ├── solution_eventreader.py
+    │   ├── challenge_eventreader.py
     │   └── challenge_eventreader.md
     │
     └── README.md
